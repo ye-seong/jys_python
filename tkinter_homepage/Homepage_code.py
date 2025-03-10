@@ -1,3 +1,11 @@
+import pymysql
+
+host = 'localhost'
+port = 3306
+database = 'homepage'
+username = 'root'
+password = '12345'
+
 class Admin:
     admin_pass = '1234'
     admin_value = True
@@ -56,20 +64,28 @@ def addToPostDB(items: list):
     f.close()
 
 def LoadUserFromDB(items: list):
-    f = open('user_db.txt', encoding='utf-8', mode='r')
-    while True:
-        line = f.readline().replace('\n', '')
-        if not line: break
-        
-        lines = line.split('|')
-        name = lines[0]
-        id = lines[1]
-        password = lines[2]
+    conn = pymysql.connect(host=host, user=username, passwd=password, port=port, db=database)
+    cursor = conn.cursor()
 
-        user = User(name, id, password)
-        user_list.append(user)
+    query = 'select user_idx, user_name, user_id, user_pw from user'
+    cursor.execute(query=query)
+    data = cursor.fetchall()
+    print(data)
+
+    # f = open('user_db.txt', encoding='utf-8', mode='r')
+    # while True:
+    #     line = f.readline().replace('\n', '')
+    #     if not line: break
+        
+    #     lines = line.split('|')
+    #     name = lines[0]
+    #     id = lines[1]
+    #     password = lines[2]
+
+    #     user = User(name, id, password)
+    #     user_list.append(user)
     
-    f.close()
+    # f.close()
 
 def LoadPostFromDB(items: list):
     f = open('post_db.txt', encoding='utf-8', mode='r')

@@ -76,14 +76,13 @@ class Coc(tk.Tk):
         self.result.delete(1.0, END)
         self.result.insert(END, text)
 
-    # 수정해야하는것임 ㅋㅋ
     def BackUp(self):
         text = self.buptext.get('1.0', 'end-1c')
         px = self.sizeEntry.get()
         result = ''
-        if self.boxsizeCheck == True:
+        if self.boxsizeCheck.getboolean :
             result = text.replace(px, '100%')
-        elif self.decoCheck == True:
+        elif self.decoCheck.getboolean :
             result = text.replace('style="', 'style="text-decoration: none; ')
 
         self.buptext.delete(1.0, END)
