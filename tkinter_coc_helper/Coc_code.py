@@ -2,13 +2,19 @@ import tkinter as tk
 from tkinter import * 
 import re
 from tkinter.font import *
+import sys
+import os
 
-
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return relative_path
 
 class Coc(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title('Coc Helper')
+        self.iconbitmap(resource_path("Coc_icon_multires.ico"))
+        self.title('롤20 도우미')
         self.geometry('400x500')
         self.resizable(False, False)
 
@@ -29,7 +35,7 @@ class Coc(tk.Tk):
         self.result = Text(self.desc_rowF2, height=10, width=55)
 
         self.buptext = Text(self.bup_rowF1, height=10, width=55)
-        self.sizeLabel = Label(self.bup_rowF1, text='박스 사이즈 (px포함) : ')
+        self.sizeLabel = Label(self.bup_rowF1, text='박스 사이즈 (px을 포함하여 입력) : ')
         self.sizeEntry = Entry(self.bup_rowF1)
         self.boxsizeCheck = Checkbutton(self.bup_rowF2, variable=self.boxsizeval, text='박스사이즈 100%로 변경')
         self.decoCheck = Checkbutton(self.bup_rowF2, variable=self.decoval, text='밑줄제거')
@@ -48,7 +54,7 @@ class Coc(tk.Tk):
         self.boxsizeCheck.pack()
         self.decoCheck.pack()
         self.bupBtn.pack(side=BOTTOM, ipadx=50, ipady=30, pady=100)
-        self.turnBtn.pack(side=RIGHT, ipadx=50, ipady=1, padx=10, pady=10)
+        self.turnBtn.pack(ipadx=50, ipady=1, padx=10, pady=10)
         self.result.pack()
 
     def DescMode(self):
@@ -65,7 +71,9 @@ class Coc(tk.Tk):
 
     def Turn(self):
         text = self.text.get('1.0', 'end-1c')
-        arr = re.findall(r'[^.!?\n]+[.!?]+|[^\n]+', text)
+        # arr = re.findall(r'.*?[.!?]+(?=\s|$)|[^.!?\s][^.!?]*$', text)
+        arr = re.findall(r'.*?[.!?]+(?=\s|$)+|[^\n]+', text)
+        # arr = re.findall(r'[^.!?\n]+[.!?]+|[^\n]+', text)
         result = ''
         for i in arr:
             if i[0] == ' ':
@@ -93,7 +101,6 @@ class Coc(tk.Tk):
         self.buptext.delete(1.0, END)
         self.buptext.insert(END, result)
 
-        
 if __name__=="__main__":
     coc = Coc()
     coc.initWindow()
